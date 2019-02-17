@@ -2,15 +2,7 @@ var express = require('express');
 var router = express.Router();
 const models = require('../models')
 const bycrypt = require('bcrypt')
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-router.get('/login', (req, res) => {
-  res.render('auth/login')
-})
+const jwt = require('jsonwebtoken')
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body
@@ -19,21 +11,16 @@ router.post('/login', (req, res) => {
       username: username
     }
   }).then(user => {
-    console.log('atas')
     if (user != null) {
       const checkPassword = bycrypt.compareSync(password, user.password);
       if (checkPassword === true) {
-        req.session.user = {
-          username: user.username
-        }
-        res.redirect('/siswas')
+        const token = jwt.sign({user: user}, 'secret_key')
+        res.status(200).json({message: "Success Login", data: {token: token}})
       } else {
-        res.redirect('/users/login')
-        console.log('tengah')
+        res.status(403).json({message: "Invalid Login"})
       }
     } else {
-      res.redirect('/users/login')
-      console.log('bawah')
+      res.status(403).json({message: "Invalid Login"})
     }
   })
 })

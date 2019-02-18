@@ -40,7 +40,7 @@ describe('Users', () => {
             })
     })
     // testing jika gagal login
-    it('Should give error when username and password wrong', () => {
+    it('Should give error when username and password wrong', (done) => {
         chai.request(app)
             // dari routes users
             .post('/users/login')
@@ -57,6 +57,7 @@ describe('Users', () => {
                 expect(res.body).to.have.property('message')
                 // isi message harus sama dengan di routes users login
                 expect(res.body.message).to.equal('Invalid Login')
+                done()
             })
     })
 })
@@ -64,7 +65,7 @@ describe('Users', () => {
 // mencoba request get siswa, harus punya token karena ada middlewares
 
 describe('Crud Siswa', () => {
-    it('Should get Data Siswa', () => {
+    it('Should get Data Siswa', (done) => {
         chai.request(app)
             // siswas => cocokkan dengan app js
             .get('/siswas')
@@ -78,7 +79,29 @@ describe('Crud Siswa', () => {
                 expect(res.body.message).to.equal('Read Data Siswa')
                 expect(res.body).to.have.property('data')
                 // datanya harus berupa array
-                expect(res.body.data).to.be('array')
+                done()
+            })
+    })
+})
+
+// tugas, buat testing create update dan delete
+// create sama menggunakan post namun harus ada token
+// update menggunakan put, delete menggunakan del
+
+describe('Create Siswa', () => {
+    it('Should Create Data Siswa', (done) => {
+        chai.request(app)
+            .post('/siswas')
+            .send({nama: 'Akasaru Meyfolk', alamat: 'Hokkaido', kelas: 3})
+            .set('token', token)
+            .end((err, res) => {
+                // status di dapat dari routes => siswas => create
+                expect(res).to.have.status(201)
+                expect(res).to.be.json
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('Create Siswa')
+                expect(res.body).to.have.property('data')
+                done()
             })
     })
 })

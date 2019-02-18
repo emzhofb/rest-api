@@ -78,7 +78,6 @@ describe('Crud Siswa', () => {
                 // isi message harus sama dengan routes siswas
                 expect(res.body.message).to.equal('Read Data Siswa')
                 expect(res.body).to.have.property('data')
-                // datanya harus berupa array
                 done()
             })
     })
@@ -92,14 +91,31 @@ describe('Create Siswa', () => {
     it('Should Create Data Siswa', (done) => {
         chai.request(app)
             .post('/siswas')
-            .send({nama: 'Akasaru Meyfolk', alamat: 'Hokkaido', kelas: 3})
             .set('token', token)
+            .send({nama: 'Akasaru Meyfolk', alamat: 'Hokkaido', kelas: 3})
             .end((err, res) => {
                 // status di dapat dari routes => siswas => create
                 expect(res).to.have.status(201)
                 expect(res).to.be.json
                 expect(res.body).to.have.property('message')
                 expect(res.body.message).to.equal('Create Siswa')
+                expect(res.body).to.have.property('data')
+                done()
+            })
+    })
+})
+
+describe('Update Siswa', () => {
+    it('Should Update Data Siswa', (done) => {
+        chai.request(app)
+            .put('/siswas/9')
+            .set('token', token)
+            .send({nama: 'MeiO Rayleigh', alamat: 'Sabaondy', kelas: 3})
+            .end((err, res) => {
+                expect(res).to.have.status(200)
+                expect(res).to.be.json
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('Update Siswa')
                 expect(res.body).to.have.property('data')
                 done()
             })

@@ -87,6 +87,8 @@ describe('Crud Siswa', () => {
 // create sama menggunakan post namun harus ada token
 // update menggunakan put, delete menggunakan del
 
+var siswaId;
+
 describe('Create Siswa', () => {
     it('Should Create Data Siswa', (done) => {
         chai.request(app)
@@ -100,6 +102,7 @@ describe('Create Siswa', () => {
                 expect(res.body).to.have.property('message')
                 expect(res.body.message).to.equal('Create Siswa')
                 expect(res.body).to.have.property('data')
+                siswaId = res.body.data.id
                 done()
             })
     })
@@ -108,7 +111,8 @@ describe('Create Siswa', () => {
 describe('Update Siswa', () => {
     it('Should Update Data Siswa', (done) => {
         chai.request(app)
-            .put('/siswas/9')
+            // ${bla bla} => untuk mengambil dan pakai `` buka ''
+            .put(`/siswas/${siswaId}`)
             .set('token', token)
             .send({nama: 'MeiO Rayleigh', alamat: 'Sabaondy', kelas: 3})
             .end((err, res) => {
@@ -117,6 +121,21 @@ describe('Update Siswa', () => {
                 expect(res.body).to.have.property('message')
                 expect(res.body.message).to.equal('Update Siswa')
                 expect(res.body).to.have.property('data')
+                done()
+            })
+    })
+})
+
+describe('Delete Siswa', () => {
+    it('Should Delete Data Siswa', (done) => {
+        chai.request(app)
+            .del(`/siswas/${siswaId}`)
+            .set('token', token)
+            .end((err, res) => {
+                expect(res).to.have.status(200)
+                expect(res).to.be.json
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('Delete Siswa with Id')
                 done()
             })
     })

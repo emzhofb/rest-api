@@ -22,7 +22,7 @@ router.delete('/:id', checkAuth, (req, res) => {
     }).then(siswa => {
         return siswa.destroy()
     }).then(siswa => {
-        res.status(200).json({message: "Delete Siswa with Id " + siswaId})
+        res.status(200).json({message: "Delete Siswa with Id"})
     }).catch(err => {
         console.log(err)
         res.status(500).json({message: "Terjadi Kesalahan"})

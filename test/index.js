@@ -111,7 +111,7 @@ describe('Create Siswa', () => {
 describe('Update Siswa', () => {
     it('Should Update Data Siswa', (done) => {
         chai.request(app)
-            // ${bla bla} => untuk mengambil dan pakai `` buka ''
+            // ${bla bla} => untuk mengambil dan pakai `` bukan ''
             .put(`/siswas/${siswaId}`)
             .set('token', token)
             .send({nama: 'MeiO Rayleigh', alamat: 'Sabaondy', kelas: 3})
